@@ -1,3 +1,4 @@
+document.addEventListener('DOMContentLoaded', function() {
     const streams = {
         "video1": "http://op-group1-swiftservehd-1.dens.tv/h/h217/02.m3u8",
         "video2": "http://op-group1-swiftservehd-1.dens.tv/h/h207/02.m3u8",
@@ -10,7 +11,7 @@
         "video9": "http://example.com/path/to/indosiar.m3u8",
         "video10": "http://example.com/path/to/nettv.m3u8"
     };
-    
+
     Object.keys(streams).forEach(id => {
         const stream = streams[id];
         const video = document.getElementById(id);
@@ -23,9 +24,9 @@
             });
         } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
             video.src = stream;
-            video.addEventListener('canplay', function () {
+            video.addEventListener('loadedmetadata', function () {
                 video.play();
             });
         }
     });
-     
+});
