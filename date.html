@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Relógio Simples</title>
+
+    <!-- dica de fonte https://stackoverflow.com/questions/33649957/how-to-set-the-font-family-like-a-digital-clock-css/33650111 -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Orbitron"
+      rel="stylesheet"
+      type="text/css"
+    />
+
+    <script>
+      function chamaRelogio() {
+        // pegando a hora, minuto e segundo
+        var tipoHora = "AM";
+
+        var date = new Date();
+        var h = date.getHours();
+        var m = date.getMinutes();
+        var s = date.getSeconds();
+
+        // arrumando as horas quebradas
+        if (h == 0) {
+          h = 12;
+        }
+
+        if (h > 12) {
+          h = h - 12; // não vai mostrar 24 :(
+          tipoHora = "PM";
+        }
+
+        // tem que colocar "0" nas horas quebradas
+        h = h < 10 ? "0" + h : h;
+        m = m < 10 ? "0" + m : m;
+        s = s < 10 ? "0" + s : s;
+
+        // montando as horas para visualização
+        var horario = h + ":" + m + ":" + s + " " + tipoHora;
+        document.getElementById("Reloginho").innerText = horario;
+        document.getElementById("Reloginho").textContent = horario;
+
+        // atualizando a cada segundo, para parecer real
+        setTimeout(chamaRelogio, 1000);
+      }
+    </script>
+
+    <style>
+      body {
+        background-color: black;
+        color: #fff;
+      }
+
+      .relogio {
+        width: 80%;
+        color: red;
+        font-size: 64px;
+        font-family: "Orbitron", Courier, monospace;
+        letter-spacing: 5px;
+        top: 50%;
+        left: 50%;
+        position: absolute;
+        transform: translateX(-50%) translateY(-50%);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="Reloginho" class="relogio"></div>
+
+    <script>
+      chamaRelogio();
+    </script>
+  </body>
+</html>
