@@ -14,9 +14,9 @@ document.addEventListener('DOMContentLoaded', function() {
         "rtv": "http://210.210.155.35/session/d63bb414-30c3-11e9-b5a0-c81f66f89318/uq2663/h/h10/01.m3u8",
         "tvone": "https://op-group1-swiftservehd-1.dens.tv/h/h224/index.m3u8",
         "mojitv": "http://rr3.dens.tv/s/s41/index.m3u8",
-        "cnbc": "https://live.cnbcindonesia.com/livecnbc/smil:cnbctv.smil/master.m3u8",
+        "cnbc": "https://www.cnbcindonesia.com/embed/tv?smartautoplay=true&comscore=off",
         "ntv": "https://nusantaratv.siar.us/nusantaratv/live/chunks.m3u8",
-        "cnn": "https://live.cnnindonesia.com:443/livecnn/smil:cnntv.smil/chunklist_w1241960898_b192000_sleng.m3u8",
+        "cnn": "https://www.cnnindonesia.com/tv/embed?smartautoplay=true",
         "garudatv": "https://etv-cdn.kdb.co.id/GarudaTV-Stream/tracks-v1a1/mono.m3u8",
         "mycinema": "http://210.210.155.37/uq2663/h/h192/index.m3u8",
         "mycinemaasia": "http://210.210.155.37/uq2663/h/h193/index.m3u8",
@@ -24,7 +24,8 @@ document.addEventListener('DOMContentLoaded', function() {
         "abckids": "https://c.mjh.nz/abc-kids.m3u8",
         "motoamerica": "https://1422977263.rsc.cdn77.org/HLS/MOTOAMERICA_SCTE.m3u8",
         "dreamwork": "http://aflaxtv.xyz:8080/2c258a9b/c73f1cfbce/157610",
-        "magnatv" : "https://edge.medcom.id/live-edge/smil:magna.smil/chunklist_w657754957_b3884000_sleng.m3u8"
+        "magnatv" : "https://edge.medcom.id/live-edge/smil:magna.smil/chunklist_w657754957_b3884000_sleng.m3u8",
+        "skysport" : "https://live.sportsnews.id/p/sky-251.html"
     };
 
     Object.keys(streams).forEach(id => {
