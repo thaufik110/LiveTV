@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live TV</title>
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
+    <style>
+        /* Reset default margin and padding */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Basic styling for the body */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        /* Styling for the video container */
+        .video-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Styling for the video wrapper */
+        .video-wrapper {
+            width: 100%;
+            max-width: 800px;
+        }
+
+        /* Styling for the video element and iframe */
+        video, iframe {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Styling for the dropdown container */
+        .dropdown-container {
+            margin-top: 20px;
+            width: 100%;
+            max-width: 800px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+        }
+
+        /* Styling for the dropdown select */
+        #channel-select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #fff;
+            font-size: 16px;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+
+        /* Label styling for the dropdown */
+        .dropdown-container label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="video-container">
+        <div class="video-wrapper">
+            <video id="player" controls></video>
+            <iframe id="iframe-player" style="display: none;" frameborder="0" allowfullscreen></iframe>
+            <div class="dropdown-container">
+                <label for="channel-select">Select Channel:</label>
+                <select id="channel-select">
+                    <!-- TV Indonesia -->
+                    <optgroup label="TV Indonesia">
+                        <option value="rcti">RCTI</option>
+                        <option value="mnc tv">MNC TV</option>
+                        <option value="gtv">GTV</option>
+                        <option value="trans 7">Trans 7</option>
+                        <option value="trans tv">Trans TV</option>
+                        <option value="antv">ANTV</option>
+                        <option value="indosiar">Indosiar</option>
+                        <option value="metrotv">Metro TV</option>
+                        <option value="nettv">NET TV</option>
+                        <option value="sctv">SCTV</option>
+                        <option value="kompastv">Kompas TV</option>
+                        <option value="rtv">RTV</option>
+                        <option value="tvone">TV One</option>
+                        <option value="cnn">CNN Indonesia</option>
+                        <option value="garudatv">Garuda TV</option>
+                        <option value="cnbc">CNBC</option>
+                        <option value="mojitv">Moji TV</option>
+                    </optgroup>
+                    <!-- TV Luar -->
+                    <optgroup label="TV Luar">
+                        <option value="tvn">TVN</option>
+                        <option value="tvnmovies">TVN Movies</option>
+                        <option value="kplus">K+</option>
+                        <option value="ntv">NTV</option>
+                        <option value="mycinema">My Cinema</option>
+                        <option value="mycinemaasia">My Cinema Asia</option>
+                        <option value="redbulltv">Red Bull TV</option>
+                        <option value="abckids">ABC Kids</option>
+                        <option value="dreamwork">Dreamwork</option>
+                        <option value="magnatv">Magna TV</option>
+                    </optgroup>
+                    <!-- TV Sport -->
+                    <optgroup label="TV Sport">
+                        <option value="motoamerica">MotoAmerica</option>
+                        <option value="skysport">Sky Sport</option>
+                        <option value="bsqa">BSQA</option>
+                        <option value="bsxt">BSXT</option>
+                    </optgroup>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const streams = {
+                "antv": "https:\/\/op-group1-swiftservehd-1.dens.tv\/s\/s07\/index.m3u8",
+                "indosiar": "http://op-group1-swiftservehd-1.dens.tv/h/h207/02.m3u8",
+                "metrotv": "http://rr.dens.tv/h/h12/index.m3u8",
+                "nettv": "http://op-group1-swiftservehd-1.dens.tv/h/h223/02.m3u8",
+                "sctv": "http://op-group1-swiftservehd-1.dens.tv/h/h217/02.m3u8",
+                "tvn": "http://op-group1-swiftservehd-1.dens.tv/h/h215/02.m3u8",
+                "tvnmovies": "http://op-group1-swiftservehd-1.dens.tv/h/h214/02.m3u8",
+                "kplus": "http://op-group1-swiftservehd-1.dens.tv/h/h219/02.m3u8",
+                "kompastv": "http://op-group1-swiftservehd-1.dens.tv/h/h234/02.m3u8",
+                "bsqa": "http://vzagut73.megogo.xyz/iptv/5WS4WSUFCCHGQF/6124/index.m3u8",
+                "bsxt": "http://stitcher-ipv4.pluto.tv/v1/stitch/embed/hls/channel/5df975e2b27cf5000921c102/master.m3u8",
+                "rtv": "http://op-group1-swiftservehd-1.dens.tv/h/h10/01.m3u8",
+                "tvone": "https://op-group1-swiftservehd-1.dens.tv/h/h224/index.m3u8",
+                "mojitv": "http://rr3.dens.tv/s/s41/index.m3u8",
+                "cnbc": "https://www.cnbcindonesia.com/embed/tv?smartautoplay=true&comscore=off",
+                "ntv": "https://nusantaratv.siar.us/nusantaratv/live/chunks.m3u8",
+                "cnn": "https://www.cnnindonesia.com/tv/embed?smartautoplay=true",
+                "garudatv": "https://etv-cdn.kdb.co.id/GarudaTV-Stream/tracks-v1a1/mono.m3u8",
+                "mycinema": "http://210.210.155.37/uq2663/h/h192/index.m3u8",
+                "mycinemaasia": "http://210.210.155.37/uq2663/h/h193/index.m3u8",
+                "redbulltv": "http://rbmn-live.akamaized.net/hls/live/590964/BoRB-AT/master_1660.m3u8",
+                "abckids": "https://c.mjh.nz/abc-kids.m3u8",
+                "motoamerica": "https://1422977263.rsc.cdn77.org/HLS/MOTOAMERICA_SCTE.m3u8",
+                "dreamwork": "http://aflaxtv.xyz:8080/2c258a9b/c73f1cfbce/157610",
+                "magnatv": "https://edge.medcom.id/live-edge/smil:magna.smil/chunklist_w657754957_b3884000_sleng.m3u8",
+                "skysport": "https://live.sportsnews.id/p/sky-251.html",
+                "trans 7": "https://video.detik.com/trans7/smil:trans7.smil/playlist.m3u8",
+                "trans tv": "https://video.detik.com/transtv/smil:transtv.smil/playlist.m3u8",
+                "rcti": "https://embed.rctiplus.com/live/rcti/inewsid",
+                "mnc tv": "https://embed.rctiplus.com/live/mnctv/inewsid",
+                "gtv": "https://embed.rctiplus.com/live/gtv/inewsid"
+		"an": "http://op-group1-swiftservehd-1.dens.tv/h/h201/02.m3u8",
+		"cm": "http://op-group1-swiftservehd-1.dens.tv/h/h212/02.m3u8",
+            };
+
+            const video = document.getElementById('player');
+            const iframePlayer = document.getElementById('iframe-player');
+            const player = new Plyr(video);
+            const channelSelect = document.getElementById('channel-select');
+
+            function loadStream(streamUrl, usePlyr = true, isIframe = false) {
+                if (isIframe) {
+                    video.style.display = 'none';
+                    iframePlayer.style.display = 'block';
+                    iframePlayer.src = streamUrl;
+                } else {
+                    iframePlayer.style.display = 'none';
+                    video.style.display = 'block';
+                    
+                    if (usePlyr) {
+                        if (Hls.isSupported()) {
+                            const hls = new Hls();
+                            hls.loadSource(streamUrl);
+                            hls.attachMedia(video);
+                            hls.on(Hls.Events.MANIFEST_PARSED, function () {
+                                video.play().catch(error => {
+                                    console.error('Error playing video:', error);
+                                });
+                            });
+                        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                            video.src = streamUrl;
+                            video.play().catch(error => {
+                                console.error('Error playing video:', error);
+                            });
+                        } else {
+                            console.error('HLS is not supported and video cannot be played.');
+                        }
+                    } else {
+                        video.src = streamUrl;
+                        video.play().catch(error => {
+                            console.error('Error playing video:', error);
+                        });
+                    }
+                }
+            }
+
+            function stopIframe() {
+                iframePlayer.src = ''; // Stop the iframe content
+                iframePlayer.style.display = 'none'; // Hide the iframe
+            }
+
+            channelSelect.addEventListener('change', function () {
+                const selectedValue = channelSelect.value;
+                const streamUrl = streams[selectedValue];
+                const isIframe = selectedValue === 'rcti' || selectedValue === 'mnc tv' || selectedValue === 'gtv';
+                const usePlyr = !(isIframe);
+
+                if (isIframe) {
+                    stopIframe();
+                } else {
+                    video.pause(); // Pause video playback
+                    video.src = ''; // Clear video source
+                }
+
+                if (streamUrl) {
+                    loadStream(streamUrl, usePlyr, isIframe);
+                }
+            });
+
+            // Load the first stream by default
+            const firstStreamId = channelSelect.value;
+            const firstStreamUrl = streams[firstStreamId];
+            const isFirstStreamIframe = firstStreamId === 'rcti' || firstStreamId === 'mnc tv' || firstStreamId === 'gtv';
+            const firstStreamUsePlyr = !(isFirstStreamIframe);
+
+            if (firstStreamUrl) {
+                loadStream(firstStreamUrl, firstStreamUsePlyr, isFirstStreamIframe);
+            }
+        });
+    </script>
+</body>
+</html>
