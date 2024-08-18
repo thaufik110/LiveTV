@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -41,15 +42,15 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-/* Styling specific to iframe elements (GTV, MNC TV, RCTI) */
-iframe#iframe-player {
-    width: 100%;
-    height: 450px; /* Atur tinggi sesuai kebutuhan */
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    background-color: #000; /* Matches Plyr's dark UI */
-    display: none; /* Initially hidden */
-}
+	/* Styling specific to iframe elements (GTV, MNC TV, RCTI) */
+	iframe#iframe-player {
+	    width: 100%;
+	    height: 450px; /* Atur tinggi sesuai kebutuhan */
+	    border-radius: 8px;
+	    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	    background-color: #000; /* Matches Plyr's dark UI */
+	    display: none; /* Initially hidden */
+	}
 
 
         /* Styling for the dropdown container */
@@ -75,6 +76,18 @@ iframe#iframe-player {
             -moz-appearance: none;
             appearance: none;
         }
+	    
+	#channel-title {
+	    font-size: 24px;
+	    font-weight: bold;
+	    text-align: center;
+	    margin-bottom: 5px; /* Adds space between the title and the video */
+	    color: #333;
+	    padding: 10px;
+	    background-color: #fff;
+	    border-radius: 8px;
+	    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	}
 
         /* Label styling for the dropdown */
         .dropdown-container label {
@@ -87,6 +100,7 @@ iframe#iframe-player {
 </head>
 <body>
     <div class="video-container">
+	<div id="channel-title">RCTI</div>
         <div class="video-wrapper">
             <video id="player" controls></video>
             <iframe id="iframe-player" style="display: none;" frameborder="0" allowfullscreen></iframe>
@@ -194,6 +208,7 @@ iframe#iframe-player {
             const iframePlayer = document.getElementById('iframe-player');
             const player = new Plyr(video);
             const channelSelect = document.getElementById('channel-select');
+	    const channelTitle = document.getElementById('channel-title');
 
             function loadStream(streamUrl, usePlyr = true, isIframe = false) {
                 if (isIframe) {
@@ -239,6 +254,7 @@ iframe#iframe-player {
             channelSelect.addEventListener('change', function () {
                 const selectedValue = channelSelect.value;
                 const streamUrl = streams[selectedValue];
+		channelTitle.textContent = channelSelect.options[channelSelect.selectedIndex].text;
                 const isIframe = selectedValue === 'rcti' || selectedValue === 'mnc tv' || selectedValue === 'gtv';
                 const usePlyr = !(isIframe);
 
