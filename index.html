@@ -82,7 +82,7 @@
 	    font-weight: bold;
 	    text-align: center;
 	    margin-bottom: 5px; /* Adds space between the title and the video */
-	    color: #333;
+	    color: blue;
 	    padding: 10px;
 	    background-color: #fff;
 	    border-radius: 8px;
@@ -220,31 +220,40 @@
                     video.style.display = 'block';
                     
                     if (usePlyr) {
-                        if (Hls.isSupported()) {
-                            const hls = new Hls();
-                            hls.loadSource(streamUrl);
-                            hls.attachMedia(video);
-                            hls.on(Hls.Events.MANIFEST_PARSED, function () {
-                                video.play().catch(error => {
-                                    console.error('Error playing video:', error);
-                                });
-                            });
-                        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                            video.src = streamUrl;
+                if (Hls.isSupported()) {
+                    const hls = new Hls();
+                    hls.loadSource(streamUrl);
+                    hls.attachMedia(video);
+                    hls.on(Hls.Events.MANIFEST_PARSED, function () {
+                        video.addEventListener('loadedmetadata', function() {
+                            video.currentTime = video.duration - 1; // Seek to near the end
                             video.play().catch(error => {
                                 console.error('Error playing video:', error);
                             });
-                        } else {
-                            console.error('HLS is not supported and video cannot be played.');
-                        }
-                    } else {
-                        video.src = streamUrl;
+                        });
+                    });
+                } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                    video.src = streamUrl;
+                    video.addEventListener('loadedmetadata', function() {
+                        video.currentTime = video.duration - 1; // Seek to near the end
                         video.play().catch(error => {
                             console.error('Error playing video:', error);
                         });
-                    }
+                    });
+                } else {
+                    console.error('HLS is not supported and video cannot be played.');
                 }
+            } else {
+                video.src = streamUrl;
+                video.addEventListener('loadedmetadata', function() {
+                    video.currentTime = video.duration - 1; // Seek to near the end
+                    video.play().catch(error => {
+                        console.error('Error playing video:', error);
+                    });
+                });
             }
+        }
+    }
 
             function stopIframe() {
                 iframePlayer.src = ''; // Stop the iframe content
